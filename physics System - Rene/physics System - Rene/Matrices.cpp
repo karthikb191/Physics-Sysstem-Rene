@@ -324,7 +324,7 @@ namespace _Maths {
 		scaleMatrix.m11 = x;
 		scaleMatrix.m22 = y;
 		scaleMatrix.m33 = z;
-
+		scaleMatrix.m44 = 1;
 		return scaleMatrix;
 	}
 	m4x4 Scale(const vec3& scale) {
@@ -332,7 +332,7 @@ namespace _Maths {
 		scaleMatrix.m11 = scale.x;
 		scaleMatrix.m22 = scale.y;
 		scaleMatrix.m33 = scale.z;
-
+		scaleMatrix.m44 = 1;
 		return scaleMatrix;
 	}
 	Vec3 GetScale(const m4x4& matrix) {
@@ -502,32 +502,40 @@ namespace _Maths {
 	}
 
 	m4x4 LookAt(const Vec3& position, const Vec3& target, const Vec3& up) {
-		Vec3 forward = Normalize(target - position);
+		Vec3 directionVec = Normalize(target - position);
+		Vec3 forward = Normalize(directionVec);
 		Vec3 right = Normalize(Cross(up, forward));
 		Vec3 newUp = Normalize(Cross(forward, right));
-
+		//std::cout << "sfdsf : " << *&(target - position) << std::endl;
 		//The matrix we are using for basis vectors is orthonormal.
 		//So, the inverse of the matrix will be it's transpose
 		//We are doing the reverse transformation of the camera here.
 		//So, first, we need the inverse transformation and then it must be multiplied with the inverse orientation
-		return Matrix4X4{
-			//Inverse of translation multiplied with the inverse of rotation(Order is reversed because we are finiding inverse)
-			right.x,				newUp.x,				forward.x,				0,
-			right.y,				newUp.y,				forward.y,				0,
-			right.z,				newUp.z,				forward.z,				0,
-			-Dot(position, right),	-Dot(position, newUp),	-Dot(position, forward),1.0f
-		};
+		//Inverse of translation multiplied with the inverse of rotation(Order is reversed because we are finiding inverse)
+		
+		Matrix4X4 result;
+		
+		result.m11 = right.x;	result.m12 = newUp.x;	result.m13 = forward.x;	result.m14 = 0;
+		result.m21 = right.y;	result.m22 = newUp.y;	result.m23 = forward.y;	result.m24 = 0;
+		result.m31 = right.z;	result.m32 = newUp.z;	result.m33 = forward.z;	result.m34 = 0;
+		result.m41 = -Dot(position, right);	
+		result.m42 = -Dot(position, newUp);	
+		result.m43 = -Dot(position, forward);	
+		result.m44 = 1.0f;
+
+		//std::cout << "view::::: " << result<< std::endl;
+		return result;
 	}
 
 	//Projection matrices
 	m4x4 Perspective(float fov, float aspect, float znear, float zfar) {
 		//FOV must be converted to radians
-		float cotHalfFOV = 1 / tanf(DEG2RAD(fov * 0.5f));
+		float cotHalfFOV = 1.0f / tanf(DEG2RAD(fov * 0.5f));
 		Matrix4X4 result;
 		result.m11 = cotHalfFOV / aspect;
 		result.m22 = cotHalfFOV;
 		result.m33 = zfar / (zfar - znear);
-		result.m34 = 1;
+		result.m34 = 1.0f;
 		result.m43 = -znear * result.m33;
 		result.m44 = 0;
 		return result;

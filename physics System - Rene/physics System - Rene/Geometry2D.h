@@ -7,6 +7,19 @@
 namespace _Geometry2D {
 	using namespace _Maths;
 
+	//Creating Aliases for intuitive function calls
+#define PointLine(point, line) PointOnLine(point, line);
+#define LinePoint(line, point) PointOnLine(point, line);
+#define CircleLine(circle, line) LineCircle(line, circle);
+#define RectangleLine(rectangle, line) LineRectangle(line, rectangle);
+#define OrientedRectangleLine(rectangle, line) LineOrientedRectangle(line, rectangle);
+#define PointRectangle(point, rectangle) PointInRectangle(point, rectangle)
+#define	PointOrientedRectangle(point, rectangle) PointInOrientedRectangle(point, rectangle);
+
+#define RectangleCircle(rectangle, circle) CircleRectangle(circle, rectangle);
+#define OrientedRectangleCircle(rectange, circle) CircleOrientedRectangle(circle, rectangle);
+#define OrientedRectangleRectangle(orientedRectangle, rectangle) RectangleOrientedRectangle(rectangle, orientedRectangle);
+
 	//A point is simply a 2D vector. Using typedef allows for intuitive representation of the point
 	typedef vec2 Point2D;
 	typedef vec3 Point3D;
@@ -24,6 +37,8 @@ namespace _Geometry2D {
 		//Member Functions
 		float Length();
 		float LengthSq();
+
+		void Draw(const vec3& color = Vec3());
 	}Line2D;
 
 	typedef struct Circle {
@@ -40,6 +55,7 @@ namespace _Geometry2D {
 		Point2D center;
 		float radius;
 
+		void Draw(const vec3& color = Vec3());
 	}Circle;
 
 	//Our Rectangle is represented in the Origin-Size notation
@@ -59,6 +75,8 @@ namespace _Geometry2D {
 		Point2D GetMax() const;
 		Point2D GetMin() const;
 		Rectangle2D FromMinMax(const vec2& min, const vec2& max);
+
+		void Draw(const vec3& color = Vec3());
 
 	}Rectangle2D;
 
@@ -90,4 +108,20 @@ namespace _Geometry2D {
 	bool PointInCircle(const Point2D &point, const Circle &circle);
 	bool PointInRectangle(const Point2D &point, const Rectangle2D &rectangle);
 	bool PointInOrientedRectangle(const Point2D &point, const OrientedRectangle &orientedRectangle);
+
+	//Line Intersection tests
+	bool LineCircle(const Line2D &line, const Circle &circle);	//TODO: need to change this to a better function
+	bool LineRectangle(const Line2D &line, const Rectangle2D &circle);
+	bool LineOrientedRectangle(const Line2D &line, const OrientedRectangle &circle);
+
+	//Detecting Collision between two primitive shapes
+	bool CircleCircle(const Circle &circle1, const Circle &circle2);
+	bool CircleRectangle(const Circle &circle, const Rectangle2D &rectangle);
+	bool CircleOrientedRectangle(const Circle &circle, const OrientedRectangle &rectangle);
+
+	bool RectangleRectangle(const Rectangle2D &rectangle1, const Rectangle2D &rectangle2);
+	bool RectangleOrientedRectangle(const Rectangle2D &rectangle, const OrientedRectangle &orientedRectangle);
+	bool OrientedRectangleOrientedRectangle(const OrientedRectangle &orientedRectangle1, const OrientedRectangle &orientedRectangle2);
+
+	//Separating Axis theorem Function
 }

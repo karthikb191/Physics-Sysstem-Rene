@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -125,12 +125,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Geometry2D.cpp" />
+    <ClCompile Include="Geometry3D.cpp" />
     <ClCompile Include="Matrices.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Vectors.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Geometry2D.h" />
+    <ClInclude Include="Geometry3D.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Matrices.h" />
     <ClInclude Include="Vectors.h" />
