@@ -79,12 +79,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\openGl libraries\glew-2.1.0-win32\glew-2.1.0\include;C:\openGl libraries\glfw-3.2.1.bin.WIN32\glfw-3.2.1.bin.WIN32\include;C:\openGl libraries\glut-3.7.6-bin\glut-3.7.6-bin\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Works\personal\Repos\Physics-System-Rene\physics System - Rene\include;C:\openGl libraries\glew-2.1.0-win32\glew-2.1.0\include;C:\openGl libraries\glfw-3.2.1.bin.WIN32\glfw-3.2.1.bin.WIN32\include;C:\openGl libraries\glut-3.7.6-bin\glut-3.7.6-bin\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\openGl libraries\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32;C:\openGl libraries\glut-3.7.6-bin\glut-3.7.6-bin;C:\openGl libraries\glfw-3.2.1.bin.WIN32\glfw-3.2.1.bin.WIN32\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glfw3.lib;glut32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\Works\personal\Repos\Physics-System-Rene\physics System - Rene\lib;C:\openGl libraries\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32;C:\openGl libraries\glut-3.7.6-bin\glut-3.7.6-bin;C:\openGl libraries\glfw-3.2.1.bin.WIN32\glfw-3.2.1.bin.WIN32\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glfw3.lib;glut32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -127,7 +127,11 @@
     <ClCompile Include="Geometry2D.cpp" />
     <ClCompile Include="Geometry3D.cpp" />
     <ClCompile Include="Matrices.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vectors.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -135,7 +139,20 @@
     <ClInclude Include="Geometry3D.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Matrices.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Vectors.h" />
+    <ClInclude Include="Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="sample.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\sample.frag" />
+    <None Include="Shaders\sample.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

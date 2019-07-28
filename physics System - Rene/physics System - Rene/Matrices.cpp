@@ -471,6 +471,14 @@ namespace _Maths {
 			vector.x * matrix.m13 + vector.y * matrix.m23 + vector.z * matrix.m33 + 1 * matrix.m43
 		};
 	}
+	Vec3 MultiplyPointAndZDivide(const Vec3& vector, const m4x4& matrix) {
+		Vec3 vec(
+			vector.x * matrix.m11 + vector.y * matrix.m21 + vector.z * matrix.m31 + 1 * matrix.m41,
+			vector.x * matrix.m12 + vector.y * matrix.m22 + vector.z * matrix.m32 + 1 * matrix.m42,
+			vector.x * matrix.m13 + vector.y * matrix.m23 + vector.z * matrix.m33 + 1 * matrix.m43
+		);
+		return vec / vec.z;
+	}
 	//Vector only has direction and doesn't have any position in space.
 	//So, w = 0 is hard-coded in the vector-Matrix multiplication
 	Vec3 MultiplyVector(const Vec3& vector, const m4x4& matrix) {
@@ -490,14 +498,17 @@ namespace _Maths {
 
 	//This gives us the transformation matrix of the spatial represetation of the object
 	//Helper function that takes scale, rotation and position to return the complete transformation matrix
+	//Scale - Rotate - Transform
 	m4x4 Transform(const Vec3& scale, const Vec3& rotation, const Vec3& position) {
 		return m4x4{
 			Scale(scale) * Rotate(rotation) * Translate(position)
+			//Translate(position) * Rotate(rotation) * Scale(scale)
 		};
 	}
 	m4x4 Transform(const Vec3& scale, const Vec3& axis, const float &angle, const Vec3& position) {
 		return{
-			Scale(scale) * AxisAngle(axis, angle) * Translate(position)
+			//Scale(scale) * AxisAngle(axis, angle) * Translate(position)
+			Translate(position) * AxisAngle(axis, angle)  * Scale(scale) 
 		};
 	}
 
@@ -536,8 +547,11 @@ namespace _Maths {
 		result.m22 = cotHalfFOV;
 		result.m33 = zfar / (zfar - znear);
 		result.m34 = 1.0f;
-		result.m43 = -znear * result.m33;
+		result.m43 = 2 * -znear * result.m33;
 		result.m44 = 0;
+
+		//result = result * Orthographic(-200, 200, -200, 200, znear, zfar);
+
 		return result;
 	}
 

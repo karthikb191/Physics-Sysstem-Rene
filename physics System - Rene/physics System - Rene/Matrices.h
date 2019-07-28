@@ -173,6 +173,7 @@ namespace _Maths {
 
 	//Multiplying vector with the respective matrix. We will be using the Row major notation here.
 	Vec3 MultiplyPoint(const Vec3& vector, const m4x4& matrix);
+	Vec3 MultiplyPointAndZDivide(const Vec3& vector, const m4x4& matrix);
 	Vec3 MultiplyVector(const Vec3& vector, const m4x4& matrix);
 	Vec3 MultiplyVector(const Vec3& vector, const m3x3& matrix);
 
