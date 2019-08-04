@@ -12,9 +12,13 @@
 #include"Shader.h"
 #include"Mesh.h"
 #include "Texture.h"
+#include"Geometry3D.h"
+#include"Globals.h"
 
 using namespace _Maths;
 using namespace _Geometry2D;
+using namespace _Geometry3D;
+using namespace _GlobalVariables;
 
 void init() {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -98,13 +102,14 @@ int main(int argc, char** argv) {
 	
 	Matrix4X4 m = Transform(Vec3(1, 1, 1), Vec3(0, 0, 0), Vec3(0, 0, 0));
 	//Matrix4X4 o = Orthographic(-200, 200, -200, 200, 0.1, 1000);//(60, 1, 0.1f, 1000);
-	Matrix4X4 p = Perspective(60, 1, 0.1f, 300);
-	
+	Matrix4X4 p = Perspective(60, 1.33, 0.1f, 300);
+	globalProjectionMatrix = p;
 
 	Vertex verts[] = {
 		Vertex(Vec3(-50.5, 0, 0), vec2(0, 1)),
 		Vertex( Vec3(50.5, 0, 0),  vec2(1, 1)),
-		Vertex( Vec3(0.0, 50.5, 0), vec2(0.5, 0))
+		Vertex( Vec3(0.0, 50.5, 0), vec2(0.5, 0)),
+		Vertex( Vec3(0.0, -50.5, 0), vec2(0.5, 0.5))
 	};
 
 
@@ -114,8 +119,13 @@ int main(int argc, char** argv) {
 	Shader s(shaderFolder);
 	Texture t(imageFolder);
 	
-	Mesh mesh(verts, sizeof(verts) / sizeof(verts[0]));
+	Mesh mesh(verts, sizeof(verts) / sizeof(verts[0]), new int[3] {0, 1, 2}, 3);
 
+	Sphere sp(Point(0, 0, 0), 3);
+
+	glEnable(GL_DEPTH_BUFFER);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	while (!glfwWindowShouldClose(win))
 	{
 
@@ -149,15 +159,21 @@ int main(int argc, char** argv) {
 
 #pragma endregion
 
-
+		//viewMatrix = 
 		Matrix4X4 v = LookAt(Vec3(0 + moveX, 0 + moveY, -100 + moveZ), GetTranslation(m), Vec3(0, 1, 0));
+		globalViewMatrix = v;
+		
 		Matrix4X4 MVP_Matrix = (m * v) * p;
 		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER_BIT);
+		
 		s.Bind();
 		s.Update(MVP_Matrix);
 		t.Bind(0);
 
 		mesh.Draw();
+
+		sp.Render(&s);
 
 		//Matrix4X4 v = LookAt(Vec3(0 + moveX, 0, -100 + moveY), Vec3(0 + angle , 0, -100 + moveY + 500), Vec3(0, 1, 0));
 		

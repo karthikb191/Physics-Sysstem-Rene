@@ -1,4 +1,6 @@
 #pragma once
+#ifndef _H_MATRICES
+#define _H_MATRICES
 #include<iostream>
 #include"Vectors.h"
 
@@ -88,8 +90,6 @@ namespace _Maths {
 		inline float* operator[](int index) {
 			return &asArray[index * 4];
 		}
-
-
 	}m4x4;
 
 	std::ostream& operator<<(std::ostream& stream, const m2x2 &matrix);
@@ -189,3 +189,4 @@ namespace _Maths {
 	m4x4 Orthographic(float left, float right, float bottom, float top, float znear, float zfar);
 
 }
+#endif

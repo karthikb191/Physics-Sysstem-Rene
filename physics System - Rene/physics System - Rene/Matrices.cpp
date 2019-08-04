@@ -6,7 +6,22 @@
 
 #define CMP(x,y) (fabs(x-y) <= FLT_EPSILON * fmaxf(1, fmaxf(fabs(x), fabs(x))))
 
+
 namespace _Maths {
+
+	//static m4x4 GetViewMatrix() {
+	//	return viewMatrix;
+	//}
+	//static m4x4 GetProjectionMatrix() {
+	//	return projectionMatrix;
+	//}
+	//static m4x4 SetProjectionMatrix(m4x4 matrix) {
+	//	projectionMatrix = matrix;
+	//}
+	//static m4x4 SetViewMatrix(m4x4 matrix) {
+	//	viewMatrix = matrix;
+	//}
+	
 	std::ostream& operator<<(std::ostream& stream, const m2x2 &matrix) {
 		stream << std::endl;
 		for (int i = 0; i < 2; i++) {

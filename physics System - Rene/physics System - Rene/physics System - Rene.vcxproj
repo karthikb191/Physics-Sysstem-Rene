@@ -126,8 +126,10 @@
   <ItemGroup>
     <ClCompile Include="Geometry2D.cpp" />
     <ClCompile Include="Geometry3D.cpp" />
+    <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Matrices.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -137,9 +139,11 @@
   <ItemGroup>
     <ClInclude Include="Geometry2D.h" />
     <ClInclude Include="Geometry3D.h" />
+    <ClInclude Include="Globals.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Matrices.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />

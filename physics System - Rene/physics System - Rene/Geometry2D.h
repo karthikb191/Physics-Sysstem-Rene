@@ -1,4 +1,5 @@
 #pragma once
+#ifndef _H_2D_GEOMETRY
 #define _H_2D_GEOMETRY
 
 #include "Vectors.h"
@@ -125,3 +126,4 @@ namespace _Geometry2D {
 
 	//Separating Axis theorem Function
 }
+#endif
