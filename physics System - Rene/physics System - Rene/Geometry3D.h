@@ -12,6 +12,33 @@ namespace _Geometry3D {
 
 	//Aliases for the functions goes here
 
+
+	typedef struct Transform_Class {
+		union
+		{
+			struct 
+			{
+				Vec3 Position;
+				Vec3 Rotation;
+				Vec3 Scale;
+			};
+		};
+
+		Transform_Class(Vec3 pos, Vec3 rot, Vec3 scl) {
+			Position = pos;	Rotation = rot;	Scale = scl;
+		}
+		Transform_Class() {
+			Position = { 0, 0 ,0 };	Rotation = { 0, 0, 0 };	Scale = {1, 1, 1};
+		}
+
+		Matrix4X4 GetTRSMatrix() const{
+			return Transform(Scale, Rotation, Position);
+		}
+		Vec3 GetPosition() { return Position; }
+		Vec3 GetRotation() { return Rotation; }
+		Vec3 GetScale() { return Scale; }
+	}Transform_Class;
+
 	//3D objects
 	typedef Vec3 Point;
 
@@ -55,49 +82,60 @@ namespace _Geometry3D {
 		inline Sphere(){
 			center = Vec3();
 			radius = 1.0f;
+			transform.Scale = transform.Scale * 100;
 			Create();
 		}
 		inline Sphere(const Point &center, const float &radius) {
 			this->center = center;
-			this->radius = radius;
+			this->radius = 1.0f;
+			transform.Position = center;
+			transform.Scale = transform.Scale * 100;
 			Create();
+			
 		}
 
+		Transform_Class transform;
 		Point center;
 		float radius;
 		Mesh *mesh;
-
+		
 		void Create();
 		void Render(Shader *s) const override;
 
 	}Sphere;
 
 	//This is position-extents representation
-	typedef struct AABB {
+	typedef struct AABB : Renderer{
 		inline AABB() {
 			position = Point();
 			extents = Vec3(1, 1, 1);
+
+			Create();
 		}
 		inline AABB(const Point &origin, const Vec3 &extents) {
 			this->position = origin;
 			this->extents = extents;
 		}
 
+		Transform_Class transform;
 		Point position;
 		Vec3 extents;
 
 		Point GetMin();
 		Point GetMax();
 
+		void Create();
+		void Render(Shader *s) const override;
 		//virtual void Render() {}
 	}AABB;
 	AABB CreateAABBFromMinMax(const Point &min, const Point &max);
 
-	typedef struct OBB {
+	typedef struct OBB : Renderer {
 		//Construct a OBB of unit size and no orientation by default, placed at origin
 		inline OBB() {
 			position = Vec3();	size = Vec3(1, 1, 1);
 			orientation = Matrix3X3();
+			Create();
 		}
 		//Construct the OBB at specified size, default orientation and at specified position
 		inline OBB(const Point& position, const vec3 &size) {
@@ -112,9 +150,13 @@ namespace _Geometry3D {
 			this->orientation = orientation;
 		}
 
+		Transform_Class transform;
 		Point position;
 		Vec3 size;
 		Matrix3X3 orientation;
+
+		void Create();
+		void Render(Shader *s) const override;
 	}OBB;
 
 
@@ -131,9 +173,12 @@ namespace _Geometry3D {
 		float distance;
 		//Returns 1 if the point is infront of the plane and -1 if the point is behind the plane
 		float PlaneEquation(const Point& point);
+
+		//void Create();
+		//void Render(Shader *s) const override;
 	}Plane;
 
-	typedef struct Triangle {
+	typedef struct Triangle : Renderer {
 		inline Triangle() {}
 		inline Triangle(const Point &pt1, const Point &pt2, const Point &pt3) {
 			a = pt1;	b = pt2;	c = pt3;
@@ -147,6 +192,9 @@ namespace _Geometry3D {
 			Point points[3];
 			float values[9];
 		};
+
+		void Create();
+		void Render(Shader *s) const override;
 	}Tri;
 
 	//Point Intersetion Tests

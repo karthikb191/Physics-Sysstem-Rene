@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
 	
 	Matrix4X4 m = Transform(Vec3(1, 1, 1), Vec3(0, 0, 0), Vec3(0, 0, 0));
 	//Matrix4X4 o = Orthographic(-200, 200, -200, 200, 0.1, 1000);//(60, 1, 0.1f, 1000);
-	Matrix4X4 p = Perspective(60, 1.33, 0.1f, 300);
+	Matrix4X4 p = Perspective(60, 1.33, 0.1f, 10000);
 	globalProjectionMatrix = p;
 
 	Vertex verts[] = {
@@ -121,16 +121,19 @@ int main(int argc, char** argv) {
 	
 	Mesh mesh(verts, sizeof(verts) / sizeof(verts[0]), new int[3] {0, 1, 2}, 3);
 
-	Sphere sp(Point(0, 0, 0), 3);
+	Sphere sp(Point(50, 50, 150), 3);
 
-	glEnable(GL_DEPTH_BUFFER);
+	glEnable(GL_DEPTH_TEST);
+	
 	glEnable(GL_CULL_FACE);
+	glDepthFunc(GL_LEQUAL);
 	glCullFace(GL_BACK);
+
 	while (!glfwWindowShouldClose(win))
 	{
 
 #pragma region Move
-
+		moveX = moveY = moveZ = 0;
 		//Sample rotation
 		if (glfwGetKey(win, GLFW_KEY_P) == GLFW_PRESS)
 			angle += 1.0f * rotSpeed + rotBoost;
@@ -142,33 +145,34 @@ int main(int argc, char** argv) {
 
 		//Sample movement
 		if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS)
-			moveZ += 1.0f * speed;
+			moveZ = 1.0f * speed;
 		if (glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS)
-			moveZ -= 1.0f * speed;
+			moveZ = -1.0f * speed;
 
 		if (glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS)
-			moveX -= 1.0f * speed;
+			moveX = -1.0f * speed;
 		if (glfwGetKey(win, GLFW_KEY_D) == GLFW_PRESS)
-			moveX += 1.0f * speed;
+			moveX = 1.0f * speed;
 
 		if (glfwGetKey(win, GLFW_KEY_R) == GLFW_PRESS)
-			moveY += 1.0f * speed;
+			moveY = 1.0f * speed;
 		if (glfwGetKey(win, GLFW_KEY_F) == GLFW_PRESS)
-			moveY -= 1.0f * speed;
+			moveY = -1.0f * speed;
 
 
 #pragma endregion
 
 		//viewMatrix = 
-		Matrix4X4 v = LookAt(Vec3(0 + moveX, 0 + moveY, -100 + moveZ), GetTranslation(m), Vec3(0, 1, 0));
+		Matrix4X4 v = LookAt(Vec3(0, 0, -100 ), GetTranslation(m), Vec3(0, 1, 0));
+		sp.transform.Position = { sp.transform.Position.x + moveX, sp.transform.Position.y + moveY, sp.transform.Position.z + moveZ};
 		globalViewMatrix = v;
 		
 		Matrix4X4 MVP_Matrix = (m * v) * p;
-		glClear(GL_COLOR_BUFFER_BIT);
-		glClear(GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		s.Bind();
+		
 		s.Update(MVP_Matrix);
+		s.Bind();
 		t.Bind(0);
 
 		mesh.Draw();
