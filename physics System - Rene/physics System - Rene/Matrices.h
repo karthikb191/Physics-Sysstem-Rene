@@ -184,6 +184,9 @@ namespace _Maths {
 	//Computing the View Matrix
 	m4x4 LookAt(const Vec3& position, const Vec3& target, const Vec3& up);
 
+	//Computing Inverse camera matrix
+	m4x4 InverseCameraMatrix(Matrix4X4 cameraMat);
+
 	//Porjection Matrices to convert from view space to normalized device coordinates
 	m4x4 Perspective(float fov, float aspect, float znear, float zfar);
 	m4x4 Orthographic(float left, float right, float bottom, float top, float znear, float zfar);

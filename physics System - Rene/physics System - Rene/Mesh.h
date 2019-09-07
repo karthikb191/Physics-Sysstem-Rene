@@ -27,6 +27,7 @@ public:
 	Mesh(Vertex* vertices, unsigned int numVertices, int *indices, unsigned int numIndices);
 	~Mesh();
 	void Draw();
+	//void AssignShader();
 
 private:
 	Mesh(const Mesh& other);
@@ -38,10 +39,14 @@ private:
 		NUM_BUFFERS	//This member is only to keep track of the number of items in the enumeration
 	};
 
+	Shader *m_shader = nullptr;
 	GLuint m_vertexArrayObject;
 	GLuint m_vertexArrayBuffers[NUM_BUFFERS];
 	GLuint numIndices;
 	unsigned int m_drawCount;	//This keeps track of how many things or vertices we are going to draw
+
+public:
+	vec4 color = vec4(1, 1, 1, 1);
 };
 
 #endif // !H_MESH

@@ -24,7 +24,7 @@ Mesh::Mesh(Vertex* vertices, unsigned int numVertices, int *indices, unsigned in
 	std::vector<vec2> texCoords;
 
 	//Since we already know the amount of verices we will be dealing with,
-	//We reserve the space before-hand
+	//This reserves space linearly.
 	positions.reserve(numVertices);
 	texCoords.reserve(numVertices);
 

@@ -552,6 +552,19 @@ namespace _Maths {
 		//std::cout << "view::::: " << result<< std::endl;
 		return result;
 	}
+	m4x4 InverseCameraMatrix(Matrix4X4 cameraMat) {
+		Matrix4X4 result;
+		vec3 camPos = vec3(cameraMat.m41, cameraMat.m42, cameraMat.m43);
+		result.m11 = cameraMat.m11;	result.m12 = cameraMat.m21;	result.m13 = cameraMat.m31;	result.m14 = 0;
+		result.m21 = cameraMat.m12;	result.m22 = cameraMat.m22;	result.m23 = cameraMat.m32;	result.m24 = 0;
+		result.m31 = cameraMat.m13;	result.m32 = cameraMat.m23;	result.m33 = cameraMat.m33;	result.m34 = 0;
+		result.m41 = -Dot(camPos, vec3(cameraMat.m11, cameraMat.m12, cameraMat.m13));
+		result.m42 = -Dot(camPos, vec3(cameraMat.m21, cameraMat.m22, cameraMat.m23));
+		result.m43 = -Dot(camPos, vec3(cameraMat.m31, cameraMat.m32, cameraMat.m33));
+		result.m44 = 1.0f;
+
+		return result;
+	}
 
 	//Projection matrices
 	m4x4 Perspective(float fov, float aspect, float znear, float zfar) {

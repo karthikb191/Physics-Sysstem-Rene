@@ -31,7 +31,9 @@ Shader::Shader(const std::string& fileName) {
 	glValidateProgram(m_Program);
 	CheckShaderError(m_Program, GL_VALIDATE_STATUS, true, "ERROR: Validation Failed: ");
 
+	//Send the MVP matrix data to shader
 	m_uniforms[TRANSFORM_U] = glGetUniformLocation(m_Program, "transform");
+	m_uniforms[COLOR_U] = glGetUniformLocation(m_Program, "color");
 }
 
 Shader::~Shader() {
@@ -50,10 +52,11 @@ void Shader::Bind() {
 	glUseProgram(m_Program);
 }
 
-void Shader::Update(Matrix4X4 transform) {
-	//m4x4 modelMatrix
-	
+void Shader::SetTransform(Matrix4X4 transform) {
 	glUniformMatrix4fv(m_uniforms[TRANSFORM_U], 1, GL_FALSE, transform.asArray);
+}
+void Shader::SetColor(Vec4 color) {
+	glUniform4f(m_uniforms[COLOR_U], color.x, color.y, color.z, color.w);
 }
 
 static GLuint CreateShader(const std::string &text, GLenum shaderType) {

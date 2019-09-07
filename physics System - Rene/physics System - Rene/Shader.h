@@ -10,7 +10,8 @@ class Shader {
 public:
 	Shader(const std::string& fileName);
 	void Bind();
-	void Update(Matrix4X4 transform);
+	void SetTransform(Matrix4X4 transform);
+	void SetColor(vec4 color);
 	~Shader();
 	
 
@@ -19,6 +20,7 @@ private:
 	static const unsigned int NUM_SHADERS = 2;
 	enum {
 		TRANSFORM_U,
+		COLOR_U,
 
 		NUM_UNIFORMS
 	};

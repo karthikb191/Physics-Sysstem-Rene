@@ -38,10 +38,6 @@ void lineSegment() {
 
 int main(int argc, char** argv) {
 	
-	
-
-
-	
 
 	Matrix3X3 mat{ 1, 2, 3, 0, 4, 5, 1, 0, 6 };
 
@@ -99,6 +95,14 @@ int main(int argc, char** argv) {
 	float rotBoost = 1.0f;
 	float time = 0;
 
+	float camSpeed = 10;
+	float camMoveX = 0;
+	float camMoveY = 0;
+	float camMoveZ = 0;
+	float camAngleX = 0;
+	float camAngleY = 0;
+	double oldMouseX = 0;
+	double oldMouseY = 0;
 	
 	Matrix4X4 m = Transform(Vec3(1, 1, 1), Vec3(0, 0, 0), Vec3(0, 0, 0));
 	//Matrix4X4 o = Orthographic(-200, 200, -200, 200, 0.1, 1000);//(60, 1, 0.1f, 1000);
@@ -112,6 +116,7 @@ int main(int argc, char** argv) {
 		Vertex( Vec3(0.0, -50.5, 0), vec2(0.5, 0.5))
 	};
 
+	Vec3 cameraMove = GetTranslation(m);
 
 	std::string shaderFolder = "./Shaders/sample";
 	std::string imageFolder = "./Textures/ichigo.jpg";
@@ -119,9 +124,15 @@ int main(int argc, char** argv) {
 	Shader s(shaderFolder);
 	Texture t(imageFolder);
 	
+	//If there's some issue, put these in the while loop
+	s.Bind();
+	t.Bind(0);
+
+
 	Mesh mesh(verts, sizeof(verts) / sizeof(verts[0]), new int[3] {0, 1, 2}, 3);
 
-	Sphere sp(Point(50, 50, 150), 3);
+	Sphere sp(Point(50, 50, 550), 3);
+	AABB box(Point(30, 230, 550), Vec3(2, 1, 1));
 
 	glEnable(GL_DEPTH_TEST);
 	
@@ -129,11 +140,17 @@ int main(int argc, char** argv) {
 	glDepthFunc(GL_LEQUAL);
 	glCullFace(GL_BACK);
 
+	Matrix4X4 cameraMatrix = Transform(Vec3(1, 1, 1), vec3(), vec3());
+	
+
+	bool deltasSet = false;
 	while (!glfwWindowShouldClose(win))
 	{
 
 #pragma region Move
 		moveX = moveY = moveZ = 0;
+		camMoveX = camMoveY = camMoveZ = 0;
+
 		//Sample rotation
 		if (glfwGetKey(win, GLFW_KEY_P) == GLFW_PRESS)
 			angle += 1.0f * rotSpeed + rotBoost;
@@ -143,27 +160,91 @@ int main(int argc, char** argv) {
 		if (glfwGetKey(win, GLFW_KEY_V) == GLFW_PRESS)
 			rotBoost += 0.01;
 
-		//Sample movement
-		if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS)
-			moveZ = 1.0f * speed;
-		if (glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS)
-			moveZ = -1.0f * speed;
+		if (glfwGetMouseButton(win, GLFW_MOUSE_BUTTON_2) == GLFW_RELEASE) {
+			deltasSet = false;
+		}
 
-		if (glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS)
-			moveX = -1.0f * speed;
-		if (glfwGetKey(win, GLFW_KEY_D) == GLFW_PRESS)
-			moveX = 1.0f * speed;
+		//Camera Movement Logic
+		if (glfwGetMouseButton(win, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS) {
+			
+			if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS)
+				camMoveZ = 1.0f * camSpeed;
+			if (glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS)
+				camMoveZ = -1.0f * camSpeed;
 
-		if (glfwGetKey(win, GLFW_KEY_R) == GLFW_PRESS)
-			moveY = 1.0f * speed;
-		if (glfwGetKey(win, GLFW_KEY_F) == GLFW_PRESS)
-			moveY = -1.0f * speed;
+			if (glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS)
+				camMoveX = -1.0f * camSpeed;
+			if (glfwGetKey(win, GLFW_KEY_D) == GLFW_PRESS)
+				camMoveX = 1.0f * camSpeed;
+
+			if (glfwGetKey(win, GLFW_KEY_E) == GLFW_PRESS)
+				camMoveY = 1.0f * camSpeed;
+			if (glfwGetKey(win, GLFW_KEY_Q) == GLFW_PRESS)
+				camMoveY = -1.0f * camSpeed;
+
+
+			double mouseX, mouseY = 0;
+			glfwGetCursorPos(win, &mouseX, &mouseY);
+
+			if (!deltasSet) {
+				deltasSet = true;
+				oldMouseX = mouseX;	oldMouseY = mouseY;
+			}
+
+			float deltaX = (mouseX - oldMouseX) / 3;
+			float deltaY = (mouseY - oldMouseY) / 3;
+
+			camAngleY += deltaX;	camAngleX += deltaY;
+
+			oldMouseX = mouseX;	oldMouseY = mouseY;
+		}
+		else {
+			//Sample movement
+			if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS)
+				moveZ = 1.0f * speed;
+			if (glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS)
+				moveZ = -1.0f * speed;
+
+			if (glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS)
+				moveX = -1.0f * speed;
+			if (glfwGetKey(win, GLFW_KEY_D) == GLFW_PRESS)
+				moveX = 1.0f * speed;
+
+			if (glfwGetKey(win, GLFW_KEY_E) == GLFW_PRESS)
+				moveY = 1.0f * speed;
+			if (glfwGetKey(win, GLFW_KEY_Q) == GLFW_PRESS)
+				moveY = -1.0f * speed;
+
+		}
 
 
 #pragma endregion
 
-		//viewMatrix = 
-		Matrix4X4 v = LookAt(Vec3(0, 0, -100 ), GetTranslation(m), Vec3(0, 1, 0));
+		//Position - target - up vector
+		cameraMove = cameraMove + Vec3(camMoveX, camMoveY, camMoveZ);
+
+		//Build camera rotation matrix
+		Matrix4X4 CamMatrix = Rotate(camAngleX, camAngleY, 0);
+		CamMatrix.m41 = cameraMatrix.m41; CamMatrix.m42 = cameraMatrix.m42; CamMatrix.m43 = cameraMatrix.m43;
+
+		Vec3 forward = vec3(CamMatrix.m31, cameraMatrix.m32, CamMatrix.m33) * camMoveZ;
+		Vec3 side = vec3(CamMatrix.m11, cameraMatrix.m12, CamMatrix.m13) * camMoveX;
+		vec3 top = vec3(CamMatrix.m21, cameraMatrix.m22, CamMatrix.m23) * camMoveY;
+		Vec3 res = forward + side + top;
+		CamMatrix.m41 += res.x; CamMatrix.m42 += res.y; CamMatrix.m43 += res.z;
+
+		cameraMatrix = CamMatrix;
+
+		
+		//cameraMatrix.m11 += side.x; cameraMatrix.m12 += side.y; cameraMatrix.m13 += side.z;
+		//cameraMatrix.m31 += forward.x; cameraMatrix.m32 += forward.y; cameraMatrix.m33 += forward.z;
+		//View Matrix calculation
+		//Matrix4X4 v = LookAt(cameraMove, box.transform.Position, Vec3(0, 1, 0));
+		Matrix4X4 v = InverseCameraMatrix(cameraMatrix);
+
+
+
+		//Moving the sphere
 		sp.transform.Position = { sp.transform.Position.x + moveX, sp.transform.Position.y + moveY, sp.transform.Position.z + moveZ};
 		globalViewMatrix = v;
 		
@@ -171,13 +252,12 @@ int main(int argc, char** argv) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		
-		s.Update(MVP_Matrix);
-		s.Bind();
-		t.Bind(0);
-
-		mesh.Draw();
+		//s.Update(MVP_Matrix);
+		//mesh.Draw();
 
 		sp.Render(&s);
+		//box.mesh->color = vec4(1, 1, 0, 1);
+		box.Render(&s);
 
 		//Matrix4X4 v = LookAt(Vec3(0 + moveX, 0, -100 + moveY), Vec3(0 + angle , 0, -100 + moveY + 500), Vec3(0, 1, 0));
 		

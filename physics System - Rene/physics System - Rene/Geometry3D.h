@@ -12,7 +12,6 @@ namespace _Geometry3D {
 
 	//Aliases for the functions goes here
 
-
 	typedef struct Transform_Class {
 		union
 		{
@@ -91,7 +90,6 @@ namespace _Geometry3D {
 			transform.Position = center;
 			transform.Scale = transform.Scale * 100;
 			Create();
-			
 		}
 
 		Transform_Class transform;
@@ -108,18 +106,27 @@ namespace _Geometry3D {
 	typedef struct AABB : Renderer{
 		inline AABB() {
 			position = Point();
-			extents = Vec3(1, 1, 1);
-
+			size = Vec3(1, 1, 1);
+			size = size * 100;
+			//Create default transform data 
+			transform = Transform_Class(position, Vec3(), size);
+			
 			Create();
 		}
-		inline AABB(const Point &origin, const Vec3 &extents) {
+		inline AABB(const Point &origin, const Vec3 &size) {
 			this->position = origin;
-			this->extents = extents;
+			//this->size = size;
+			this->size = size * 100;
+			//Create new transform data from specified location and scale
+			transform = Transform_Class(position, Vec3(), size);
+			std::cout << "Position of Box Spawn: " << transform.Position << std::endl;
+			Create();
 		}
 
+		Mesh *mesh;					//Mesh data is populated in the create function
 		Transform_Class transform;
 		Point position;
-		Vec3 extents;
+		Vec3 size;
 
 		Point GetMin();
 		Point GetMax();
