@@ -2,6 +2,7 @@
 #ifndef _H_GEOMETRY3D
 #define _H_GEOMETRY3D
 
+#include "Transform.h"
 #include "Vectors.h"
 #include "Matrices.h"
 #include "Renderer.h"
@@ -12,31 +13,6 @@ namespace _Geometry3D {
 
 	//Aliases for the functions goes here
 
-	typedef struct Transform_Class {
-		union
-		{
-			struct 
-			{
-				Vec3 Position;
-				Vec3 Rotation;
-				Vec3 Scale;
-			};
-		};
-
-		Transform_Class(Vec3 pos, Vec3 rot, Vec3 scl) {
-			Position = pos;	Rotation = rot;	Scale = scl;
-		}
-		Transform_Class() {
-			Position = { 0, 0 ,0 };	Rotation = { 0, 0, 0 };	Scale = {1, 1, 1};
-		}
-
-		Matrix4X4 GetTRSMatrix() const{
-			return Transform(Scale, Rotation, Position);
-		}
-		Vec3 GetPosition() { return Position; }
-		Vec3 GetRotation() { return Rotation; }
-		Vec3 GetScale() { return Scale; }
-	}Transform_Class;
 
 	//3D objects
 	typedef Vec3 Point;
@@ -98,7 +74,7 @@ namespace _Geometry3D {
 		Mesh *mesh;
 		
 		void Create();
-		void Render(Shader *s) const override;
+		void Render(Shader *s) override;
 
 	}Sphere;
 
@@ -109,7 +85,7 @@ namespace _Geometry3D {
 			size = Vec3(1, 1, 1);
 			size = size * 100;
 			//Create default transform data 
-			transform = Transform_Class(position, Vec3(), size);
+			transform = Transform(position, Vec3(), size);
 			
 			Create();
 		}
@@ -124,7 +100,7 @@ namespace _Geometry3D {
 		}
 
 		Mesh *mesh;					//Mesh data is populated in the create function
-		Transform_Class transform;
+		Transform transform;
 		Point position;
 		Vec3 size;
 
@@ -132,7 +108,7 @@ namespace _Geometry3D {
 		Point GetMax();
 
 		void Create();
-		void Render(Shader *s) const override;
+		void Render(Shader *s) override;
 		//virtual void Render() {}
 	}AABB;
 	AABB CreateAABBFromMinMax(const Point &min, const Point &max);
@@ -163,7 +139,7 @@ namespace _Geometry3D {
 		Matrix3X3 orientation;
 
 		void Create();
-		void Render(Shader *s) const override;
+		void Render(Shader *s) override;
 	}OBB;
 
 
@@ -201,7 +177,7 @@ namespace _Geometry3D {
 		};
 
 		void Create();
-		void Render(Shader *s) const override;
+		void Render(Shader *s) override;
 	}Tri;
 
 	//Point Intersetion Tests

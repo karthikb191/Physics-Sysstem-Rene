@@ -14,6 +14,7 @@
 #include "Texture.h"
 #include"Geometry3D.h"
 #include"Globals.h"
+#include"Camera\Camera.h"
 
 using namespace _Maths;
 using namespace _Geometry2D;
@@ -104,7 +105,7 @@ int main(int argc, char** argv) {
 	double oldMouseX = 0;
 	double oldMouseY = 0;
 	
-	Matrix4X4 m = Transform(Vec3(1, 1, 1), Vec3(0, 0, 0), Vec3(0, 0, 0));
+	Matrix4X4 m = GetTransformMatrix(Vec3(1, 1, 1), Vec3(0, 0, 0), Vec3(0, 0, 0));
 	//Matrix4X4 o = Orthographic(-200, 200, -200, 200, 0.1, 1000);//(60, 1, 0.1f, 1000);
 	Matrix4X4 p = Perspective(60, 1.33, 0.1f, 10000);
 	globalProjectionMatrix = p;
@@ -140,8 +141,10 @@ int main(int argc, char** argv) {
 	glDepthFunc(GL_LEQUAL);
 	glCullFace(GL_BACK);
 
-	Matrix4X4 cameraMatrix = Transform(Vec3(1, 1, 1), vec3(), vec3());
 	
+
+	Matrix4X4 cameraMatrix = GetTransformMatrix(Vec3(1, 1, 1), vec3(), vec3());
+	Camera camera(Vec3(1, 1, 1), vec3(), vec3(1, 1, 1));
 
 	bool deltasSet = false;
 	while (!glfwWindowShouldClose(win))
@@ -220,189 +223,26 @@ int main(int argc, char** argv) {
 
 #pragma endregion
 
-		//Position - target - up vector
-		cameraMove = cameraMove + Vec3(camMoveX, camMoveY, camMoveZ);
-
-		//Build camera rotation matrix
-		Matrix4X4 CamMatrix = Rotate(camAngleX, camAngleY, 0);
-		CamMatrix.m41 = cameraMatrix.m41; CamMatrix.m42 = cameraMatrix.m42; CamMatrix.m43 = cameraMatrix.m43;
-
-		Vec3 forward = vec3(CamMatrix.m31, cameraMatrix.m32, CamMatrix.m33) * camMoveZ;
-		Vec3 side = vec3(CamMatrix.m11, cameraMatrix.m12, CamMatrix.m13) * camMoveX;
-		vec3 top = vec3(CamMatrix.m21, cameraMatrix.m22, CamMatrix.m23) * camMoveY;
-		Vec3 res = forward + side + top;
-		CamMatrix.m41 += res.x; CamMatrix.m42 += res.y; CamMatrix.m43 += res.z;
-
-		cameraMatrix = CamMatrix;
-
 		
-		//cameraMatrix.m11 += side.x; cameraMatrix.m12 += side.y; cameraMatrix.m13 += side.z;
-		//cameraMatrix.m31 += forward.x; cameraMatrix.m32 += forward.y; cameraMatrix.m33 += forward.z;
 		//View Matrix calculation
-		//Matrix4X4 v = LookAt(cameraMove, box.transform.Position, Vec3(0, 1, 0));
-		Matrix4X4 v = InverseCameraMatrix(cameraMatrix);
 
+		camera.MoveCamera(Vec3(camMoveX, camMoveY, camMoveZ));
+		camera.SetCameraRoation(Vec3(camAngleX, camAngleY, 0));
 
+		camera.Update();
+		globalViewMatrix = camera.GetViewMatrix();
 
-		//Moving the sphere
-		sp.transform.Position = { sp.transform.Position.x + moveX, sp.transform.Position.y + moveY, sp.transform.Position.z + moveZ};
-		globalViewMatrix = v;
-		
-		Matrix4X4 MVP_Matrix = (m * v) * p;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		
 		//s.Update(MVP_Matrix);
 		//mesh.Draw();
+		sp.transform.Position = { sp.transform.Position.x + moveX, sp.transform.Position.y + moveY, sp.transform.Position.z + moveZ};
 
 		sp.Render(&s);
 		//box.mesh->color = vec4(1, 1, 0, 1);
 		box.Render(&s);
-
-		//Matrix4X4 v = LookAt(Vec3(0 + moveX, 0, -100 + moveY), Vec3(0 + angle , 0, -100 + moveY + 500), Vec3(0, 1, 0));
 		
-
-		//
-
-		//glColor3f(1.0f, 0.5f, 0.5f);
-		//Point3D one(-50.5f, 0, -30.0f);
-		//Point3D two(50.5f, 0, 30.0f);
-		//Point3D three(50.5f, 0, 100.0f);
-		//Point3D four(-50.5f, 0, 100.0f);
-
-		////one = MultiplyPoint(one, v);
-		////std::cout << "one: " << one << std::endl;
-		////one = MultiplyPoint(one, pers) / 200;
-		////std::cout << "one: " << one << std::endl;
-
-		////std::cout << "View: " << v << std::endl;
-		//
-		////The Z divide step is hard wired into the graphics hardware. This is only for demonstration purpose
-		//one = MultiplyPointAndZDivide(one, (m * v) * p);
-		//two = MultiplyPointAndZDivide(two, (m * v) * p);
-		//three = MultiplyPointAndZDivide(three, (m * v) * p);
-		//four = MultiplyPointAndZDivide(four, (m * v) * p);
-
-		////one = one / one.z;
-		////two = two / two.z;
-		////three = three / three.z;
-		////four = four / four.z;
-
-		////std::cout << "two: " << one << std::endl;
-
-		////std::cout << "two: " << one << std::endl;
-
-		//glPolygonMode(GL_FRONT, GL_FILL);
-		//glPolygonMode(GL_BACK, GL_LINE);
-
-		//glBegin(GL_QUADS);
-		//glVertex3f(one.x, one.y, one.z);
-		//glColor3f(0, 0, 0);
-		//glVertex3f(two.x, two.y, two.z);
-		//glColor3f(0, 0, 1);
-		//glVertex3f(three.x, three.y, three.z);
-		//glColor3f(0, 1, 0);
-		//glVertex3f(four.x, four.y, four.z);
-		////glVertex2f(0.0f, 100.0f);
-		////glVertex2f(100.0f, 0.5f);
-		////glVertex2f(-100.0f, 0.5f);
-		//glEnd();
-
-
-		//glColor3f(0, 0, 0);
-		//
-
-		//
-		//Point2D check(75, 45);
-		////check.Draw();
-
-		//vec2 p1 = vec2(3, 8);
-		//vec2 p2 = vec2(7.5, 3);
-
-		//vec2 n = Normalize(p2 - p1);
-		////Line2D(vec2(), n).Draw();
-		//vec2 w = vec2(1.0f / n.x, 1.0f / n.y);
-		////Line2D(vec2(), w).Draw();
-		//time += 1.0f;
-
-		////Line2D line(vec2(15, -14), vec2(95, -32));
-		//Line2D line(vec2(10 * cos(DEG2RAD(time)), 10 * sinf(DEG2RAD(time))), 
-		//			vec2(150 * cos(DEG2RAD(time)), 150 * sinf(DEG2RAD(time))));
-		//////Point2D m((line.end.y - line.start.y), -(line.end.x - line.start.x));
-		//////Line2D norm(vec2(), m);
-		//////norm.Draw();
-		//Rectangle2D rect = Rectangle2D(vec2(0 + moveX, 0 + moveY), vec2(40, 60));
-		//
-		//if (LineRectangle(line, rect)) {
-		//	rect.Draw(vec3(1, 0, 1.0f));
-		//	line.Draw(vec3(1, 0, 1.0f));
-		//}
-		//else {
-		//	rect.Draw();
-		//	line.Draw();
-		//}
-
-
-		//Circle c(Point2D(10, 60), 100);
-		//OrientedRectangle rect1(Point2D(0 + moveX, 0 + moveY), Point2D(50, 50), angle);
-		//OrientedRectangle rect2(Point2D(112 + moveX * 0.8f, 47 + moveY * 0.8f), Point2D(80, 50), -angle * 0.8f);
-		//Rectangle2D rectA = Rectangle2D(vec2(0 + moveX, 0 + moveY), vec2(40, 127));
-		//Rectangle2D rectB = Rectangle2D(vec2(-50 , -50), vec2(-40, -127));
-		//
-		//if (OrientedRectangleOrientedRectangle(rect1, rect2)) {
-		//	rect1.Draw(vec3(1, 0, 1.0f));
-		//	rect2.Draw(vec3(1, 0, 1.0f));
-		//	//rectB.Draw(vec3(1, 0, 1.0f));
-		//}
-		//else {
-		//	rect1.Draw();
-		//	rect2.Draw();
-		//	//rectB.Draw();
-		//}
-
-		//if (CircleOrientedRectangle(c, rect1)) {
-		//	c.Draw(vec3(1, 0, 1.0f));
-		//	rect1.Draw(vec3(1, 0, 1.0f));
-		//}
-		//else {
-		//	c.Draw();
-		//	rect1.Draw();
-		//}
-		//
-		//
-		//if (LineCircle(line, c)) {
-		//	c.Draw(vec3(1, 0, 1.0f));
-		//	line.Draw(vec3(1, 0, 1.0f));
-		//}
-		//else {
-		//	c.Draw();
-		//	line.Draw();
-		//}
-
-		//
-		////bool pointCheck = PointInOrientedRectangle(check, rect1);
-		//bool pointCheck = PointOrientedRectangle(check, rect1);
-		//if (pointCheck)
-		//	rect1.Draw(vec3(1, 0, 1));
-		//else
-		//	rect1.Draw(vec3(0, 0, 0));
-			
-
-		
-		//OrientedRectangle rect2(Point2D(-74, 48), Point2D(80, 46), angle * 2);
-		//rect2.Draw();
-		//OrientedRectangle rect3(Point2D(87, -95), Point2D(45, 4), angle * 0.6f);
-		//rect3.Draw();
-		//OrientedRectangle rect4(Point2D(-47, -46), Point2D(8, 20), angle * 3.0f);
-		//rect4.Draw();
-		//glFlush();
-
-		//glBegin(GL_LINES);
-		//glLineWidth(5);
-		//glColor3f(0, 0, 0);
-		//glVertex2f(0, 0);
-		//glVertex2f(150, 150);
-		//glEnd();
 
 		glfwSwapBuffers(win);
 		glfwPollEvents();

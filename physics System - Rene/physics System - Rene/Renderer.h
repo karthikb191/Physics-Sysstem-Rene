@@ -43,6 +43,6 @@ public:
 class Renderer {
 public:
 	virtual ~Renderer() {};
-	virtual void Render(Shader *s) const = 0;
+	virtual void Render(Shader *s) = 0;
 	
 };

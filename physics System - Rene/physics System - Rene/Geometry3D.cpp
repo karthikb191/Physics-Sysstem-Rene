@@ -171,7 +171,7 @@ namespace _Geometry3D
 	}
 
 	//Render a sphere and send the data to openGL
-	void Sphere::Render(Shader *s) const{
+	void Sphere::Render(Shader *s) {
 		//std::cout << "Rendering sphere" << std::endl;
 
 		//Create a model matrix
@@ -179,6 +179,7 @@ namespace _Geometry3D
 		//Matrix4X4 modelMatrix = Transform(Vec3(1 * 100, 1 * 100, 1 * 100), Vec3(0, 0, 0), center);
 		Matrix4X4 modelMatrix = transform.GetTRSMatrix();
 		
+		//std::cout << modelMatrix;
 		//std::cout << globalViewMatrix  << std::endl;
 
 		Matrix4X4 mvp = (modelMatrix * globalViewMatrix) * globalProjectionMatrix;
@@ -273,7 +274,7 @@ namespace _Geometry3D
 
 		mesh = new Mesh(vertices, 24, indices, 36);
 	}
-	void AABB::Render(Shader *s) const {
+	void AABB::Render(Shader *s) {
 		Matrix4X4 modelMatrix = transform.GetTRSMatrix();
 		Matrix4X4 mvp = (modelMatrix * globalViewMatrix) * globalProjectionMatrix;
 

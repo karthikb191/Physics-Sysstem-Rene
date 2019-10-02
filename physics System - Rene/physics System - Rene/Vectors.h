@@ -50,6 +50,8 @@ namespace _Maths {
 		}
 
 		void Draw();
+		static Vec3 Zero() { return Vec3(0, 0, 0); }
+		static Vec3 One() { return Vec3(1, 1, 1); }
 	}vec3;
 
 	typedef struct Vec4 {
@@ -70,6 +72,8 @@ namespace _Maths {
 			x = a; y = b; z = c; w = d;
 		}
 
+		//static Vec4 Zero() { return Vec4(0, 0, 0, 0); }
+		//static Vec4 One() { return Vec4(1, 1, 1, 1); }
 	}vec4;
 
 	std::ostream& operator<<(std::ostream& stream, Vec2& vector);

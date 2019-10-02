@@ -178,8 +178,8 @@ namespace _Maths {
 	Vec3 MultiplyVector(const Vec3& vector, const m3x3& matrix);
 
 	//Transformation Matrix
-	m4x4 Transform(const Vec3& scale, const Vec3& rotation, const Vec3& position);
-	m4x4 Transform(const Vec3& scale, const Vec3& axis, const float &angle, const Vec3& position);
+	m4x4 GetTransformMatrix(const Vec3& scale, const Vec3& rotation, const Vec3& position);
+	m4x4 GetTransformMatrix(const Vec3& scale, const Vec3& axis, const float &angle, const Vec3& position);
 
 	//Computing the View Matrix
 	m4x4 LookAt(const Vec3& position, const Vec3& target, const Vec3& up);

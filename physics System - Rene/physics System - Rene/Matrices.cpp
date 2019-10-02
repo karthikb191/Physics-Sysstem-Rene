@@ -319,6 +319,7 @@ namespace _Maths {
 		translationMatrix.m41 = x;
 		translationMatrix.m42 = y;
 		translationMatrix.m43 = z;
+		translationMatrix.m44 = 1;
 
 		return translationMatrix;
 	}
@@ -327,6 +328,7 @@ namespace _Maths {
 		translationMatrix.m41 = translation.x;
 		translationMatrix.m42 = translation.y;
 		translationMatrix.m43 = translation.z;
+		translationMatrix.m44 = 1;
 
 		return translationMatrix;
 	}
@@ -514,13 +516,13 @@ namespace _Maths {
 	//This gives us the transformation matrix of the spatial represetation of the object
 	//Helper function that takes scale, rotation and position to return the complete transformation matrix
 	//Scale - Rotate - Transform
-	m4x4 Transform(const Vec3& scale, const Vec3& rotation, const Vec3& position) {
+	m4x4 GetTransformMatrix(const Vec3& scale, const Vec3& rotation, const Vec3& position) {
 		return m4x4{
 			Scale(scale) * Rotate(rotation) * Translate(position)
 			//Translate(position) * Rotate(rotation) * Scale(scale)
 		};
 	}
-	m4x4 Transform(const Vec3& scale, const Vec3& axis, const float &angle, const Vec3& position) {
+	m4x4 GetTransformMatrix(const Vec3& scale, const Vec3& axis, const float &angle, const Vec3& position) {
 		return{
 			//Scale(scale) * AxisAngle(axis, angle) * Translate(position)
 			Translate(position) * AxisAngle(axis, angle)  * Scale(scale) 

@@ -137,6 +137,7 @@
     <ClCompile Include="Vectors.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Geometry2D.h" />
     <ClInclude Include="Geometry3D.h" />
     <ClInclude Include="Globals.h" />
@@ -144,6 +145,7 @@
     <ClInclude Include="Matrices.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Selection\SelectionContext.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
