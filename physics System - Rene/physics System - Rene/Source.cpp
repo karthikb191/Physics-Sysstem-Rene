@@ -132,8 +132,11 @@ int main(int argc, char** argv) {
 
 	Mesh mesh(verts, sizeof(verts) / sizeof(verts[0]), new int[3] {0, 1, 2}, 3);
 
-	Sphere sp(Point(50, 50, 550), 3);
-	AABB box(Point(30, 230, 550), Vec3(2, 1, 1));
+	
+	_Primitives::Sphere sp(Point(50, 50, 550));
+	_Primitives::Box box(Point(30, 230, 550), Vec3(2, 1, 1));
+	//Sphere sp(Point(50, 50, 550), 1);
+	//AABB box(Point(30, 230, 550), Vec3(2, 1, 1));
 
 	glEnable(GL_DEPTH_TEST);
 	
@@ -146,7 +149,9 @@ int main(int argc, char** argv) {
 	Matrix4X4 cameraMatrix = GetTransformMatrix(Vec3(1, 1, 1), vec3(), vec3());
 	Camera camera(Vec3(1, 1, 1), vec3(), vec3(1, 1, 1));
 
-	bool deltasSet = false;
+	camera.SetCameraRenderMode(ECameraRenderMode::M_Perspective);
+
+	bool deltasSet = false;	bool spacePressed = false;
 	while (!glfwWindowShouldClose(win))
 	{
 
@@ -222,19 +227,31 @@ int main(int argc, char** argv) {
 
 
 #pragma endregion
+#pragma region Render Mode Switch
+		if (glfwGetKey(win, GLFW_KEY_SPACE) == GLFW_PRESS && spacePressed == false) {
+			if (camera.eCameraRenderMode == ECameraRenderMode::M_Orthographic)
+				camera.SetCameraRenderMode(ECameraRenderMode::M_Perspective);
+			else
+				camera.SetCameraRenderMode(ECameraRenderMode::M_Orthographic);
+			spacePressed = true;
+
+		}
+		if (glfwGetKey(win, GLFW_KEY_SPACE) == GLFW_RELEASE)
+			spacePressed = false;
+#pragma endregion
 
 		
 		//View Matrix calculation
-
 		camera.MoveCamera(Vec3(camMoveX, camMoveY, camMoveZ));
 		camera.SetCameraRoation(Vec3(camAngleX, camAngleY, 0));
 
 		camera.Update();
 		globalViewMatrix = camera.GetViewMatrix();
 
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		
+
 		//s.Update(MVP_Matrix);
 		//mesh.Draw();
 		sp.transform.Position = { sp.transform.Position.x + moveX, sp.transform.Position.y + moveY, sp.transform.Position.z + moveZ};

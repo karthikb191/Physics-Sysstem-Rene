@@ -40,9 +40,9 @@ public:
 	static GLuint m_rendererId;
 };
 
-class Renderer {
+class IRenderer {
 public:
-	virtual ~Renderer() {};
+	virtual ~IRenderer() {};
 	virtual void Render(Shader *s) = 0;
 	
 };

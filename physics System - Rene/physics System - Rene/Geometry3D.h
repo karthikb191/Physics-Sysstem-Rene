@@ -6,13 +6,12 @@
 #include "Vectors.h"
 #include "Matrices.h"
 #include "Renderer.h"
-#include "Mesh.h"
+//#include "Mesh.h"
 #include "Shader.h"
 namespace _Geometry3D {
 	using namespace _Maths;
 
 	//Aliases for the functions goes here
-
 
 	//3D objects
 	typedef Vec3 Point;
@@ -53,33 +52,33 @@ namespace _Geometry3D {
 	Ray CreateRayFromPoints(const Point &a, const Point &b);
 
 	//Sphere is one of the very simplest shapes. It makes it very efficient for collision detection
-	typedef struct Sphere : Renderer{
+	typedef struct Sphere : IRenderer{
 		inline Sphere(){
 			center = Vec3();
 			radius = 1.0f;
 			transform.Scale = transform.Scale * 100;
-			Create();
+			//Create();
 		}
 		inline Sphere(const Point &center, const float &radius) {
 			this->center = center;
 			this->radius = 1.0f;
 			transform.Position = center;
 			transform.Scale = transform.Scale * 100;
-			Create();
+			//Create();
 		}
 
 		Transform_Class transform;
 		Point center;
 		float radius;
-		Mesh *mesh;
+		//Mesh *mesh;
 		
 		void Create();
-		void Render(Shader *s) override;
+		void Render(Shader *s) override {}
 
 	}Sphere;
 
 	//This is position-extents representation
-	typedef struct AABB : Renderer{
+	typedef struct AABB : IRenderer{
 		inline AABB() {
 			position = Point();
 			size = Vec3(1, 1, 1);
@@ -87,7 +86,7 @@ namespace _Geometry3D {
 			//Create default transform data 
 			transform = Transform(position, Vec3(), size);
 			
-			Create();
+			//Create();
 		}
 		inline AABB(const Point &origin, const Vec3 &size) {
 			this->position = origin;
@@ -96,10 +95,10 @@ namespace _Geometry3D {
 			//Create new transform data from specified location and scale
 			transform = Transform_Class(position, Vec3(), size);
 			std::cout << "Position of Box Spawn: " << transform.Position << std::endl;
-			Create();
+			//Create();
 		}
 
-		Mesh *mesh;					//Mesh data is populated in the create function
+		//Mesh *mesh;					//Mesh data is populated in the create function
 		Transform transform;
 		Point position;
 		Vec3 size;
@@ -108,12 +107,12 @@ namespace _Geometry3D {
 		Point GetMax();
 
 		void Create();
-		void Render(Shader *s) override;
+		void Render(Shader *s) override {}
 		//virtual void Render() {}
 	}AABB;
 	AABB CreateAABBFromMinMax(const Point &min, const Point &max);
 
-	typedef struct OBB : Renderer {
+	typedef struct OBB : IRenderer {
 		//Construct a OBB of unit size and no orientation by default, placed at origin
 		inline OBB() {
 			position = Vec3();	size = Vec3(1, 1, 1);
@@ -139,7 +138,7 @@ namespace _Geometry3D {
 		Matrix3X3 orientation;
 
 		void Create();
-		void Render(Shader *s) override;
+		void Render(Shader *s) override {}
 	}OBB;
 
 
@@ -161,7 +160,7 @@ namespace _Geometry3D {
 		//void Render(Shader *s) const override;
 	}Plane;
 
-	typedef struct Triangle : Renderer {
+	typedef struct Triangle : IRenderer {
 		inline Triangle() {}
 		inline Triangle(const Point &pt1, const Point &pt2, const Point &pt3) {
 			a = pt1;	b = pt2;	c = pt3;
@@ -182,5 +181,5 @@ namespace _Geometry3D {
 
 	//Point Intersetion Tests
 
-}
+};
 #endif // !define _H_GEOMETRY3D

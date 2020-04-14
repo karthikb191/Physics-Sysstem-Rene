@@ -1,11 +1,13 @@
 #pragma once
 #ifndef H_MESH
 #define H_MESH
-#include"Vectors.h"
-#include<GL\glew.h>
-#include"Renderer.h"
-using namespace _Maths;
 
+#include<GL\glew.h>
+#include "Renderer.h"
+#include "Transform.h"
+
+using namespace _Maths;
+//using namespace _Geometry3D;
 
 
 class Vertex {
@@ -48,5 +50,55 @@ private:
 public:
 	vec4 color = vec4(1, 1, 1, 1);
 };
+
+
+namespace _Primitives {
+	typedef Vec3 Point;
+	
+
+	class Primitive:IRenderer{
+	public:
+		//Creates a box of unit length
+		Primitive();
+		Primitive(Point position, Vec3 rotation, Vec3 scale);
+		Primitive(Point position);
+		
+		Transform transform;
+
+	protected:
+		Point position;
+		Vec3 scale;
+		Vec3 rotation;
+		Matrix3X3 orientation;
+
+	public:
+
+		Mesh *mesh;
+		virtual void Render(Shader *s);
+		virtual void Create() = 0;
+		virtual ~Primitive() { delete mesh; }
+	};
+
+	class Box : public Primitive{
+	public:
+		Box();
+		Box(Point position, vec3 size);
+
+		virtual void Create();
+
+	private:
+		Vec3 size;
+	};
+
+	class Sphere : public Primitive {
+	public:
+		Sphere();
+		Sphere(Point position);
+
+		virtual void Create();
+	};
+
+};
+
 
 #endif // !H_MESH

@@ -94,8 +94,8 @@ public:
 	void Update() {  }
 
 
-private:
 	ECameraRenderMode eCameraRenderMode;
+private:
 	float nearClippingPlane;
 	float farClippingPlane;
 	float fov;
