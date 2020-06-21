@@ -79,11 +79,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)physics System - Rene\include;$(SolutionDir)Plugins\glew-2.1.0-win32\glew-2.1.0\include;$(SolutionDir)Plugins\glfw-3.2.1.bin.WIN32\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)Plugins\glut-3.7.6-bin\glut-3.7.6-bin\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Plugins\GLM-SDL\include;$(SolutionDir)Plugins\glew-2.1.0-win32\glew-2.1.0\include;$(SolutionDir)Plugins\glfw-3.2.1.bin.WIN32\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)Plugins\glut-3.7.6-bin\glut-3.7.6-bin\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>E:\Works\personal\Repos\Physics-System-Rene\physics System - Rene\lib;$(SolutionDir)Plugins\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32;$(SolutionDir)Plugins\glut-3.7.6-bin\glut-3.7.6-bin;$(SolutionDir)Plugins\glfw-3.2.1.bin.WIN32\glfw-3.2.1.bin.WIN32\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Plugins\GLM-SDL\lib;$(SolutionDir)Plugins\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32;$(SolutionDir)Plugins\glut-3.7.6-bin\glut-3.7.6-bin;$(SolutionDir)Plugins\glfw-3.2.1.bin.WIN32\glfw-3.2.1.bin.WIN32\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;glfw3.lib;glut32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
