@@ -6,6 +6,9 @@
 #include "Renderer.h"
 #include "Transform.h"
 
+//Forward Declares
+class Transform;
+
 using namespace _Maths;
 //using namespace _Geometry3D;
 
@@ -50,7 +53,6 @@ private:
 public:
 	vec4 color = vec4(1, 1, 1, 1);
 };
-
 
 namespace _Primitives {
 	typedef Vec3 Point;

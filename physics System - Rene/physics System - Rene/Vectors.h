@@ -115,11 +115,11 @@ namespace _Maths {
 	float Dot(const vec2& l, const vec2& r);
 	float Dot(const vec3& l, const vec3& r);
 	float Dot(const vec4& l, const vec4& r);
-
+	
 	float Magnitude(const vec2& v);
 	float Magnitude(const vec3& v);
 	float Magnitude(const vec4& v);
-
+	
 	float MagnitudeSq(const vec2& v);
 	float MagnitudeSq(const vec3& v);
 	float MagnitudeSq(const vec4& v);

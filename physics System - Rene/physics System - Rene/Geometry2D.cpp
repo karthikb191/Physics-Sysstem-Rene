@@ -368,6 +368,8 @@ namespace _Geometry2D {
 		//
 		//vec2 orientedExtentDirection1 = orientedRectangle.halfExtents;
 
+		//TODO: Add a transform component and consider just using it instead of 
+		//Rotating the extents. Should work the same way
 		MatrixMultiplication(orientedAxesSet[0].asArray,
 							vec2(orientedAxesSet[0].x, orientedAxesSet[0].y).asArray,
 								zRot, 1, 2, 2, 2);

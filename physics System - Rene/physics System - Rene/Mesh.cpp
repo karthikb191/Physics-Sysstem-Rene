@@ -96,7 +96,7 @@ void Mesh::Draw() {
 
 namespace _Primitives {
 
-	Primitive::Primitive() : position(0, 0, 0), rotation(vec3()), scale(100, 100, 100) {
+	Primitive::Primitive() : position(0, 0, 0), rotation(vec3()), scale(1, 1, 1) {
 		transform = Transform(position, rotation, scale);
 
 		//Create();
@@ -104,7 +104,8 @@ namespace _Primitives {
 	Primitive::Primitive(Point position, Vec3 rotation, Vec3 scale) {
 		this->position = position;
 		this->rotation = rotation;
-		this->scale = scale * 100;
+		//this->scale = scale * 100;
+		this->scale = scale;
 
 		transform = Transform(position, rotation, scale);
 		//Create();
@@ -114,7 +115,8 @@ namespace _Primitives {
 		this->rotation = Vec3();
 		this->scale = Vec3(1, 1, 1);
 
-		this->transform = Transform(position, rotation, scale * 100);
+		//this->transform = Transform(position, rotation, scale * 100);
+		this->transform = Transform(position, rotation, scale);
 		//Create();
 	}
 
@@ -125,7 +127,7 @@ namespace _Primitives {
 		this->scale = Vec3(1, 1, 1);
 		this->rotation = Vec3();
 
-		this->transform = Transform(position, rotation, scale * 100);
+		this->transform = Transform(position, rotation, scale);
 		Create();
 	}
 	Sphere::Sphere() :Primitive() { Create(); }

@@ -6,7 +6,6 @@
 #include "Vectors.h"
 #include "Matrices.h"
 #include "Renderer.h"
-//#include "Mesh.h"
 #include "Shader.h"
 namespace _Geometry3D {
 	using namespace _Maths;
@@ -103,8 +102,8 @@ namespace _Geometry3D {
 		Point position;
 		Vec3 size;
 
-		Point GetMin();
-		Point GetMax();
+		Point GetMin() const;
+		Point GetMax() const;
 
 		void Create();
 		void Render(Shader *s) override {}
@@ -145,7 +144,7 @@ namespace _Geometry3D {
 	//A Plane is defined by a normal and distance from the origin
 	typedef struct Plane {
 
-		inline Plane() : normal(1, 0, 1) {}
+		inline Plane() : normal(0, 0, 1) {}
 		inline Plane(Vec3 normal, float distance) {
 			this->normal = normal;
 			this->distance = distance;
@@ -180,6 +179,18 @@ namespace _Geometry3D {
 	}Tri;
 
 	//Point Intersetion Tests
+	bool PointInSphere(const Point &point, const Sphere &sphere);
+	Point ClosestPoint(const Point &point, const Sphere &sphere);
+	bool PointInAABB(const Point &point, const AABB &aabb);
+	Point ClosestPoint(const Point &point, const AABB &aabb);
+	bool PointInOBB(const Point &point, const OBB &obb);
+	Point ClosestPoint(const Point &point, const OBB &obb);
+	bool PointOnPlane(const Point& point, const Plane& plane);
+	Point ClosestPoint(const Point& point, const Plane& plane);
+	bool PointOnLine(const Point& point, const Line &line);
+	Point ClosestPoint(const Point& point, const Line &line);
+	bool PointOnRay(const Point& point, const Ray &ray);
+	Point ClosestPoint(const Point& point, const Ray &ray);
 
 };
 #endif // !define _H_GEOMETRY3D

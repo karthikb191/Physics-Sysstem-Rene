@@ -91,12 +91,12 @@ int main(int argc, char** argv) {
 	float moveX = 0;
 	float moveY = 0;
 	float moveZ = 0;
-	float speed = 5.0f;
+	float speed = 0.1f;
 	float rotSpeed = 5.0f;
 	float rotBoost = 1.0f;
 	float time = 0;
 
-	float camSpeed = 10;
+	float camSpeed = 0.1;
 	float camMoveX = 0;
 	float camMoveY = 0;
 	float camMoveZ = 0;
@@ -133,8 +133,8 @@ int main(int argc, char** argv) {
 	Mesh mesh(verts, sizeof(verts) / sizeof(verts[0]), new int[3] {0, 1, 2}, 3);
 
 	
-	_Primitives::Sphere sp(Point(50, 50, 550));
-	_Primitives::Box box(Point(30, 230, 550), Vec3(2, 1, 1));
+	_Primitives::Sphere sp(Point(0, 0, 2));
+	_Primitives::Box box(Point(0, 4, 2), Vec3(2, 1, 1));
 	//Sphere sp(Point(50, 50, 550), 1);
 	//AABB box(Point(30, 230, 550), Vec3(2, 1, 1));
 
